@@ -1,4 +1,16 @@
+import copy
+
 import requests
+
+
+def generative(f):
+    def wrapper(*args, **kwargs):
+        copied_object = copy.deepcopy(args[0])
+        args = (copied_object, ) + args[1:]
+        f(*args, **kwargs)
+        return copied_object
+    return wrapper
+
 
 class NaverBookQuery:
     client_key = None
