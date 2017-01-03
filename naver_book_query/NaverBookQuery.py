@@ -5,10 +5,9 @@ import requests
 
 def generative(f):
     def wrapper(*args, **kwargs):
-        copied_object = copy.deepcopy(args[0])
-        args = (copied_object, ) + args[1:]
-        f(*args, **kwargs)
-        return copied_object
+        self = copy.deepcopy(args[0])
+        f(self, *args[1:], **kwargs)
+        return self
     return wrapper
 
 
