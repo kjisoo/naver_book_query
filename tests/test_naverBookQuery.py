@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from naver_book_query.NaverBookQuery import NaverBookQuery
-
+from naver_book_query.Book import Book
 
 class TestNaverBookQuery(TestCase):
     def setUp(self):
@@ -85,3 +85,13 @@ class TestNaverBookQuery(TestCase):
         query = self.query.filter(title='python').offset(0).limit(14).all()
         if len(query) != 14:
             self.fail()
+
+    def test_model_cls(self):
+        NaverBookQuery.model_cls = Book
+        book = self.query.filter(title='python').first()
+        if not isinstance(book, Book):
+            self.fail(book)
+        books = self.query.filter(title='python').limit(10).all()
+        for book in books:
+            if not isinstance(book, Book):
+                self.fail(book)
