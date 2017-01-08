@@ -16,6 +16,7 @@ def generative(f):
 class NaverBookQuery:
     client_key = None
     secret_key = None
+    model_cls = None
     __base_url = 'https://openapi.naver.com/v1/search/book_adv.json?'
 
     def __init__(self):
@@ -84,7 +85,10 @@ class NaverBookQuery:
         return None
 
     def __get_items(self):
-        return self.response.get('items', [])
+        items = self.response.get('items', [])
+        if self.model_cls is not None:
+            items = [self.model_cls(item) for item in items]
+        return items
 
     def __get_param(self):
         return urllib.parse.urlencode(self.criterion)
