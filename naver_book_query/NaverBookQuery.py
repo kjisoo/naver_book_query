@@ -23,6 +23,8 @@ class NaverBookQuery:
             'start': 1,
             'display': 10,
         }
+        self.response = None
+        self.last_param = None
 
     @generative
     def filter(self, **criterion):
@@ -56,20 +58,33 @@ class NaverBookQuery:
         return self
 
     def count(self):
-        return self.__request()['display']
+        self.__request()
+        return self.response.get('display', 0)
 
     def get(self, isbn):
         self._filter(isbn=isbn)
         self.offset(0)
         self.limit(1)
-        return self.__request()['items']
+        self.__request()
+        return self.__get_item_or_none()
 
     def first(self):
         self.limit(1)
-        return self.__request()['items']
+        self.__request()
+        return self.__get_item_or_none()
 
     def all(self):
-        return self.__request()['items']
+        self.__request()
+        return self.__get_items()
+
+    def __get_item_or_none(self):
+        items = self.__get_items()
+        if len(items) > 0:
+            return items[0]
+        return None
+
+    def __get_items(self):
+        return self.response.get('items', [])
 
     def __get_param(self):
         return urllib.parse.urlencode(self.criterion)
@@ -78,12 +93,19 @@ class NaverBookQuery:
         if self.client_key is None or self.secret_key is None:
             raise EnvironmentError('Undefined client_key or secret_key')
 
+        param = self.__get_param()
+
+        if param == self.last_param:
+            return
+        else:
+            self.last_param = param
+
         headers = {
             'X-Naver-Client-Id': self.client_key,
             'X-Naver-Client-Secret': self.secret_key,
         }
-        request = urllib.request.Request(self.__base_url + self.__get_param(),
+        request = urllib.request.Request(self.__base_url + param,
                                          headers=headers)
-        response = urllib.request.urlopen(request)
+        response = urllib.request.urlopen(request).read().decode('utf-8')
 
-        return json.loads(response.read().decode('utf-8'))
+        self.response = json.loads(response)
