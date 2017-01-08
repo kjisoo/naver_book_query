@@ -65,20 +65,20 @@ class TestNaverBookQuery(TestCase):
 
     def test_get(self):
         result = self.query.get('9788992649681')
-        if len(result) != 1:
+        if result is None:
             self.fail(result)
 
         result = self.query.offset(1).get('9788992649681')
-        if len(result) != 1:
+        if result is None:
             self.fail(result)
 
         result = self.query.filter(title='JAISDIO@#*U#').get('9788992649681')
-        if len(result) != 0:
+        if result is not None:
             self.fail(result)
 
     def test_first(self):
         result = self.query.filter(title='python').limit(14).offset(0).first()
-        if len(result) != 1:
+        if not isinstance(result, dict):
             self.fail(result)
 
     def test_all(self):
