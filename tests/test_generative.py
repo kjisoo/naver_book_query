@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from naver_book_query.NaverBookQuery import generative
+from naver_book_query import generative
 
 
 class MockClass:

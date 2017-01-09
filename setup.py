@@ -13,7 +13,7 @@ setup(
     author_email='kim@jisoo.net',
     license='MIT License',
     url='https://github.com/kjisoo/naver_book_query',
-    packages=['naver_book_query'],
+    py_modules=['naver_book_query', 'book'],
     description="Use naver book query like sqlalchemy",
     long_description=readme,
     install_requires=[],

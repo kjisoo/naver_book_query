@@ -1,7 +1,7 @@
 from unittest import TestCase
 
-from naver_book_query.NaverBookQuery import NaverBookQuery
-from naver_book_query.Book import Book
+from naver_book_query import NaverBookQuery
+from book import Book
 
 class TestNaverBookQuery(TestCase):
     def setUp(self):
