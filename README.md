@@ -10,7 +10,7 @@ pip install naver-book-query
 
 ### Quickstart
 ```python
-from naver_book_query import Book, NaverBookQuery
+from naver_book_query import NaverBookQuery
 NaverBookQuery.client_key = 'client key of naver'
 NaverBookQuery.secret_key = 'secret key of naver'
 
@@ -41,6 +41,7 @@ books is list of dict
 
 if you want to get book class
 ```python
+from book import Book
 NaverBookQuery.model_cls = Book
 books = query.filter(title='python').filter(author='me').all()
 book = query.get('0123456789123') # isbn number
